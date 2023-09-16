@@ -5,7 +5,6 @@ from defaults import default_rooms
 class Hotel:
     def __init__(self, hotel_name: str) -> None:
         self.r = redis.Redis(decode_responses=True, protocol=3)
-        self.r.flushdb()
         self.hotel_name = hotel_name
 
         for room in default_rooms:
@@ -107,6 +106,12 @@ def main() -> None:
     hotel.remove_reservation(102)
     hotel.reserve_room(103, "Joe Biden", "2019-08-09", "2019-08-10")
     hotel.print_room_list(hotel.get_room_list())
+
+    white_house = Hotel("white_house")
+    white_house.add_room(404)
+    white_house.add_room(405)
+    white_house.remove_room(405)
+    white_house.reserve_room(404, "Joe Biden", "2019-08-09", "2019-08-10")
 
     while True:
         print("\nHotel Management CLI")
