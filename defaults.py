@@ -21,3 +21,7 @@ default_rooms = [
         },
     },
 ]
+
+# more_rooms = [
+#     {"room_id": id, "reservation": {"booked": 0}} for id in range(1, 50)
+# ]

@@ -5,7 +5,7 @@ from defaults import default_rooms
 class Hotel:
     def __init__(self, hotel_name: str) -> None:
         self.r = redis.Redis(decode_responses=True, protocol=3)
-        self.r.flushdb()  # TODO: Remove when done
+        self.r.flushdb()
         self.hotel_name = hotel_name
 
         for room in default_rooms:
