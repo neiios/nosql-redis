@@ -61,6 +61,40 @@ class Hotel:
         else:
             print(f"Room {room_id} wasn't booked to begin with.")
 
+    def get_room_list(self) -> ([(str, str)], [(str, str)]):
+        key = f"{self.hotel_name}:room:*"
+        room_hashes = self.r.keys(key)
+        room_list = [self.r.hgetall(hash) for hash in room_hashes]
+        available_rooms = [
+            (hash, room)
+            for hash, room in zip(room_hashes, room_list)
+            if room["booked"] == "0"
+        ]
+        booked_rooms = [
+            (hash, room)
+            for hash, room in zip(room_hashes, room_list)
+            if room["booked"] != "0"
+        ]
+
+        return (available_rooms, booked_rooms)
+
+    def print_room_list(self, room_list: ([(str, str)], [(str, str)])) -> None:
+        available_rooms, booked_rooms = room_list
+
+        print("Available Rooms:")
+        for room in available_rooms:
+            print(f"Room ID: {room[0]}, Status: {room[1]['booked']}")
+
+        print("Booked Rooms:")
+        for room in booked_rooms:
+            print(
+                f"Room ID: {room[0]}, "
+                f"Status: {room[1]['booked']}, "
+                f"Name: {room[1].get('name', 'N/A')}, "
+                f"Start Date: {room[1].get('start_date', 'N/A')}, "
+                f"End Date: {room[1].get('end_date', 'N/A')}"
+            )
+
 
 def main() -> None:
     hotel = Hotel("trivago")
@@ -72,6 +106,7 @@ def main() -> None:
     hotel.remove_reservation(103)
     hotel.remove_reservation(102)
     hotel.reserve_room(103, "Joe Biden", "2019-08-09", "2019-08-10")
+    hotel.print_room_list(hotel.get_room_list())
 
 
 if __name__ == "__main__":
