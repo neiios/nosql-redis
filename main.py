@@ -42,7 +42,10 @@ class Hotel:
                     "end_date": end_date,
                 },
             )
-            pipeline.execute()
+            try:
+                pipeline.execute()
+            except redis.WatchError:
+                print(f"Room {room_id} status changed. Try again.")
         else:
             print(f"Can't reserve room {room_id}.")
 
@@ -56,7 +59,10 @@ class Hotel:
             pipeline.multi()
             pipeline.delete(key)
             pipeline.hset(key, "booked", 0)
-            pipeline.execute()
+            try:
+                pipeline.execute()
+            except redis.WatchError:
+                print(f"Room {room_id} status changed. Try again.")
         else:
             print(f"Can't remove reservation for room {room_id}.")
 
