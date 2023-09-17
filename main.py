@@ -3,8 +3,8 @@ from defaults import default_rooms
 
 
 class Hotel:
-    def __init__(self, hotel_name: str) -> None:
-        self.r = redis.Redis(decode_responses=True, protocol=3)
+    def __init__(self, connection: redis.Redis, hotel_name: str) -> None:
+        self.r = connection
         self.hotel_name = hotel_name
 
         for room in default_rooms:
@@ -96,7 +96,10 @@ class Hotel:
 
 
 def main() -> None:
-    hotel = Hotel("trivago")
+    connection = redis.Redis(decode_responses=True, protocol=3)
+    connection.flushdb()
+
+    hotel = Hotel(connection, "trivago")
     hotel.add_room(404)
     hotel.add_room(405)
     hotel.remove_room(405)
@@ -107,7 +110,7 @@ def main() -> None:
     hotel.reserve_room(103, "Joe Biden", "2019-08-09", "2019-08-10")
     hotel.print_room_list(hotel.get_room_list())
 
-    white_house = Hotel("white_house")
+    white_house = Hotel(connection, "white_house")
     white_house.add_room(404)
     white_house.add_room(405)
     white_house.remove_room(405)
