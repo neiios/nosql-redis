@@ -1,4 +1,9 @@
-# Room Hotel Reservation System
+
+# nosql redis task
+
+enjoy :)
+
+## TODO
 
 - [x] Registering and removing individual rooms.
 - [x] Viewing a list of available and booked rooms.
